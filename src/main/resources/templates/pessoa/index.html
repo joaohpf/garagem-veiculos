@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pessoas - Garagem de Veículos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Garagem de Veículos</h1>
+        <nav>
+            <a th:href="@{/pessoas}">Pessoas</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h2>Pessoas</h2>
+            <a th:href="@{/pessoas/novo}" class="btn btn-primary">+ Nova Pessoa</a>
+        </div>
+
+        <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+
+        <table th:if="${!pessoas.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${pessoas}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.nome}"></td>
+                    <td th:text="${p.cpf}"></td>
+                    <td th:text="${p.email}"></td>
+                    <td th:text="${p.telefone != null ? p.telefone : '-'}"></td>
+                    <td class="actions">
+                        <a th:href="@{/pessoas/{id}/editar(id=${p.id})}" class="btn btn-secondary">Editar</a>
+                        <a th:href="@{/pessoas/{id}/excluir(id=${p.id})}" class="btn btn-danger">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p th:if="${pessoas.isEmpty()}" class="empty-message">Nenhuma pessoa cadastrada.</p>
+    </main>
+</div>
+</body>
+</html>
