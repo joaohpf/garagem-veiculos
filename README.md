@@ -1,10 +1,12 @@
 # Garagem de Veículos
 
-Sistema de gerenciamento de garagem desenvolvido para a disciplina **Arquitetura de Software — ESW430** da **UniRV**.
+Sistema de gerenciamento de garagem desenvolvido para a disciplina **Arquitetura de Software** da **UniRV**.
 
 ## Integrantes
 
 - João Henrique
+- Gustavo Lopes
+- João Victor
 
 ## Linguagem e Framework
 
