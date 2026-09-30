@@ -44,15 +44,3 @@ Cada entidade segue a estrutura:
 ## Ferramentas de IA utilizadas
 
 - **Claude** (Anthropic) — geração e revisão do código
-
-## Entrega 1 — Módulo Pessoas
-
-- [x] Listar pessoas (`GET /pessoas`)
-- [x] Cadastrar pessoa (`GET/POST /pessoas/novo`)
-- [x] Editar pessoa (`GET/POST /pessoas/{id}/editar`)
-- [x] Excluir pessoa com confirmação (`GET/POST /pessoas/{id}/excluir`)
-- [x] Validação de campos obrigatórios
-- [x] Validação de CPF duplicado
-- [x] Dados persistidos em `data/pessoas.json`
-- [x] Controller depende apenas de `IPessoaRepository` (injetado pelo construtor)
-- [x] Nenhuma classe além de `PessoaRepository` acessa o arquivo JSON
