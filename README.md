@@ -21,14 +21,6 @@ Sistema de gerenciamento de garagem desenvolvido para a disciplina **Arquitetura
 - JDK 17+
 - Maven 3.8+
 
-### Rodar a aplicação
-
-```bash
-cd garagem-veiculos
-mvn spring-boot:run
-```
-
-Acesse: [http://localhost:8080/pessoas](http://localhost:8080/pessoas)
 
 ## Arquitetura
 
