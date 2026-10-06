@@ -9,3 +9,4 @@ public class GaragemApplication {
         SpringApplication.run(GaragemApplication.class, args);
     }
 }
+

@@ -13,3 +13,4 @@ public interface IPessoaRepository {
     void remover(int id);
     boolean cpfJaExiste(String cpf, int idIgnorado);
 }
+
