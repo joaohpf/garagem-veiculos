@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pessoas - Garagem de Veículos</title>
+    <title>Veículos - Garagem de Veículos</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -34,7 +34,7 @@
                     </svg>
                     Reservas
                 </a>
-                <a th:href="@{/pessoas}" class="nav-link active" aria-current="page">
+                <a th:href="@{/pessoas}" class="nav-link">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                         <circle cx="9" cy="7" r="4"/>
@@ -43,10 +43,10 @@
                     </svg>
                     Pessoas
                 </a>
-                <a th:href="@{/veiculos}" class="nav-link">
+                <a th:href="@{/veiculos}" class="nav-link active" aria-current="page">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="1" y="3" width="15" height="13"/>
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
                         <circle cx="5.5" cy="18.5" r="2.5"/>
                         <circle cx="18.5" cy="18.5" r="2.5"/>
                     </svg>
@@ -71,87 +71,101 @@
         <!-- Cabeçalho da Página com Ação Principal -->
         <div class="page-header">
             <div class="page-header-title">
-                <h2>Pessoas Cadastradas</h2>
-                <p>Controle de condutores e usuários autorizados a reservar veículos</p>
+                <h2>Veículos Cadastrados</h2>
+                <p>Controle do catálogo da frota com placa única, especificações e ano</p>
             </div>
-            <a th:href="@{/pessoas/novo}" class="btn btn-primary">
+            <a th:href="@{/veiculos/novo}" class="btn btn-primary">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="12" y1="5" x2="12" y2="19"/>
                     <line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                + Nova Pessoa
+                + Novo Veículo
             </a>
         </div>
 
         <!-- Card de Listagem -->
-        <section class="card" aria-labelledby="card-pessoas-titulo">
+        <section class="card" aria-labelledby="card-veiculos-titulo">
             <div class="card-header">
                 <div class="card-title-group">
                     <div class="card-icon" aria-hidden="true">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
+                            <rect x="1" y="3" width="15" height="13"/>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+                            <circle cx="5.5" cy="18.5" r="2.5"/>
+                            <circle cx="18.5" cy="18.5" r="2.5"/>
                         </svg>
                     </div>
                     <div>
-                        <h3 id="card-pessoas-titulo" class="card-title">Lista de Usuários e Condutores</h3>
-                        <p class="card-subtitle">Registros ativos no sistema com validação de CPF único</p>
+                        <h3 id="card-veiculos-titulo" class="card-title">Frota Cadastrada</h3>
+                        <p class="card-subtitle">Veículos disponíveis para reserva institucional</p>
                     </div>
                 </div>
             </div>
 
             <div class="card-body">
-                <div th:if="${pessoas.isEmpty()}" class="empty-state">
+                <div th:if="${veiculos.isEmpty()}" class="empty-state">
                     <div class="empty-state-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="8.5" cy="7" r="4"/>
-                            <line x1="23" y1="11" x2="17" y2="11"/>
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
                     </div>
-                    <p>Nenhuma pessoa cadastrada no sistema.</p>
-                    <a th:href="@{/pessoas/novo}" class="btn btn-secondary btn-sm">+ Cadastrar primeira pessoa</a>
+                    <p>Nenhum veículo cadastrado na frota.</p>
+                    <a th:href="@{/veiculos/novo}" class="btn btn-secondary btn-sm">+ Cadastrar primeiro veículo</a>
                 </div>
 
-                <div th:unless="${pessoas.isEmpty()}" class="table-responsive">
+                <div th:unless="${veiculos.isEmpty()}" class="table-responsive">
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 60px;">#</th>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Email</th>
-                                <th>Telefone</th>
+                                <th>Placa</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Ano</th>
+                                <th>Cor</th>
                                 <th style="text-align: right;">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="p : ${pessoas}">
-                                <td style="color: var(--color-text-muted); font-weight: 600;" th:text="${p.id}">1</td>
+                            <tr th:each="v : ${veiculos}">
                                 <td>
-                                    <strong th:text="${p.nome}">Nome</strong>
+                                    <span class="badge-plate" th:text="${v.placa}">ABC1234</span>
+                                </td>
+                                <td th:text="${v.marca}">Marca</td>
+                                <td>
+                                    <strong th:text="${v.modelo}">Modelo</strong>
                                 </td>
                                 <td>
-                                    <code style="font-size: 0.9em; background: var(--color-surface-subtle); padding: 2px 6px; border-radius: 4px;" th:text="${p.cpf}">000.000.000-00</code>
+                                    <span th:text="${v.ano}">2022</span>
                                 </td>
-                                <td th:text="${p.email}">email@dominio.com</td>
-                                <td th:text="${p.telefone != null and !p.telefone.isBlank() ? p.telefone : '-'}">-</td>
+                                <td>
+                                    <span th:text="${v.cor != null and !v.cor.isBlank() ? v.cor : 'Não informada'}"
+                                          th:style="${v.cor == null or v.cor.isBlank() ? 'color: var(--color-text-muted); font-style: italic;' : ''}">
+                                        Prata
+                                    </span>
+                                </td>
                                 <td>
                                     <div class="actions" style="justify-content: flex-end;">
-                                        <a th:href="@{/pessoas/{id}/editar(id=${p.id})}" class="btn btn-secondary btn-sm">
+                                        <a class="btn btn-secondary btn-sm"
+                                           th:href="@{/veiculos/{id}/editar(id=${v.id})}">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                             </svg>
                                             Editar
                                         </a>
-                                        <a th:href="@{/pessoas/{id}/excluir(id=${p.id})}" class="btn btn-danger btn-sm">
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <polyline points="3 6 5 6 21 6"/>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                            </svg>
-                                            Excluir
-                                        </a>
+                                        <form method="post"
+                                              th:action="@{/veiculos/{id}/excluir(id=${v.id})}"
+                                              onsubmit="return confirm('Excluir este veículo?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                                Excluir
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas - Garagem de Veículos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Cabeçalho Institucional & Navegação -->
+    <header>
+        <div class="container header-inner">
+            <a th:href="@{/}" class="brand" aria-label="Página Inicial - Garagem de Veículos">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.9 2 11.2 2 11.5V16c0 .6.4 1 1 1h2"/>
+                        <circle cx="7" cy="17" r="2"/>
+                        <path d="M9 17h6"/>
+                        <circle cx="17" cy="17" r="2"/>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-title">Garagem de Veículos</span>
+                    <span class="brand-subtitle">Gestão Acadêmica de Frota • ESW430</span>
+                </div>
+            </a>
+            <nav aria-label="Navegação principal">
+                <a th:href="@{/}" class="nav-link active" aria-current="page">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Reservas
+                </a>
+                <a th:href="@{/pessoas}" class="nav-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Pessoas
+                </a>
+                <a th:href="@{/veiculos}" class="nav-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                    Veículos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Notificação de Sucesso -->
+        <div th:if="${sucesso}" class="alert alert-success" role="alert">
+            <div class="alert-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <div th:text="${sucesso}">Operação realizada com sucesso!</div>
+        </div>
+
+        <!-- Título da Página -->
+        <div class="page-header">
+            <div class="page-header-title">
+                <h2>Painel de Reservas</h2>
+                <p>Controle de períodos, disponibilidade em tempo real e agendamentos</p>
+            </div>
+        </div>
+
+        <!-- CARD 1: Disponibilidade dos Veículos Hoje -->
+        <section class="card" aria-labelledby="card-disponibilidade-titulo">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 id="card-disponibilidade-titulo" class="card-title">Disponibilidade dos Veículos Hoje</h3>
+                        <p class="card-subtitle">Status operacional calculado para a data atual</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div th:if="${veiculos.isEmpty()}" class="empty-state">
+                    <div class="empty-state-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <p>Nenhum veículo cadastrado no sistema.</p>
+                    <a th:href="@{/veiculos/novo}" class="btn btn-secondary btn-sm">+ Cadastrar Veículo</a>
+                </div>
+
+                <div th:unless="${veiculos.isEmpty()}" class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Placa</th>
+                                <th>Modelo</th>
+                                <th>Marca</th>
+                                <th>Status Hoje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="v : ${veiculos}">
+                                <td>
+                                    <span class="badge-plate" th:text="${v.placa}">ABC1234</span>
+                                </td>
+                                <td th:text="${v.modelo}">Modelo</td>
+                                <td th:text="${v.marca}">Marca</td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${statusHoje[v.id] == 'Disponível' ? 'badge-disponivel' : 'badge-reservado'}">
+                                        <span class="badge-dot" aria-hidden="true"></span>
+                                        <span th:text="${statusHoje[v.id]}">Disponível</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARD 2: Formulário de Reserva (Nova ou Edição) -->
+        <section class="card" aria-labelledby="card-form-titulo">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 id="card-form-titulo" class="card-title"
+                            th:text="${reserva.id == 0 ? 'Nova Reserva' : 'Editar Período da Reserva'}">
+                            Nova Reserva
+                        </h3>
+                        <p class="card-subtitle">
+                            <span th:if="${reserva.id == 0}">Selecione o veículo, a pessoa condutora e o intervalo de datas</span>
+                            <span th:unless="${reserva.id == 0}">Alteração de período para a reserva em andamento</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Banner explicativo quando estiver editando -->
+                <div th:if="${reserva.id != 0}" class="edit-banner" role="status">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span>
+                        <strong>Modo de Edição:</strong> Você está alterando as datas da reserva <strong>#<span th:text="${reserva.id}"></span></strong>. Veículo e pessoa permanecem bloqueados para preservar o registro.
+                    </span>
+                </div>
+
+                <!-- Aviso caso falte veículo ou pessoa -->
+                <div th:if="${veiculos.isEmpty() or pessoas.isEmpty()}" class="alert alert-warning" role="alert">
+                    <div class="alert-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        Cadastre ao menos uma pessoa e um veículo antes de criar uma reserva.
+                        <div style="margin-top: 8px; display: flex; gap: 8px;">
+                            <a th:if="${pessoas.isEmpty()}" th:href="@{/pessoas/novo}" class="btn btn-secondary btn-sm">+ Cadastrar Pessoa</a>
+                            <a th:if="${veiculos.isEmpty()}" th:href="@{/veiculos/novo}" class="btn btn-secondary btn-sm">+ Cadastrar Veículo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <form th:object="${reserva}" method="post"
+                      th:action="${reserva.id == 0} ? @{/reservas/novo} : @{/reservas/{id}/editar(id=${reserva.id})}">
+                    <div class="form-grid">
+                        <!-- Campo Veículo -->
+                        <div class="form-group">
+                            <label for="veiculoId">
+                                Veículo <span class="required" title="Campo obrigatório">*</span>
+                            </label>
+                            <select id="veiculoId" th:field="*{veiculoId}" th:disabled="${reserva.id != 0}">
+                                <option value="">Selecione um veículo</option>
+                                <option th:each="v : ${veiculos}"
+                                        th:value="${v.id}"
+                                        th:text="${v.placa + ' — ' + v.modelo + ' (' + v.marca + ')'}">
+                                </option>
+                            </select>
+                            <span class="error" th:errors="*{veiculoId}"></span>
+                        </div>
+                        <input th:if="${reserva.id != 0}" type="hidden" th:field="*{veiculoId}">
+
+                        <!-- Campo Pessoa -->
+                        <div class="form-group">
+                            <label for="pessoaId">
+                                Pessoa <span class="required" title="Campo obrigatório">*</span>
+                            </label>
+                            <select id="pessoaId" th:field="*{pessoaId}" th:disabled="${reserva.id != 0}">
+                                <option value="">Selecione uma pessoa</option>
+                                <option th:each="p : ${pessoas}"
+                                        th:value="${p.id}"
+                                        th:text="${p.nome}">
+                                </option>
+                            </select>
+                            <span class="error" th:errors="*{pessoaId}"></span>
+                        </div>
+                        <input th:if="${reserva.id != 0}" type="hidden" th:field="*{pessoaId}">
+
+                        <!-- Campo Data Início -->
+                        <div class="form-group">
+                            <label for="dataInicio">
+                                Data de Início <span class="required" title="Campo obrigatório">*</span>
+                            </label>
+                            <input id="dataInicio" type="date" th:field="*{dataInicio}">
+                            <span class="error" th:errors="*{dataInicio}"></span>
+                        </div>
+
+                        <!-- Campo Data Fim -->
+                        <div class="form-group">
+                            <label for="dataFim">
+                                Data de Fim <span class="required" title="Campo obrigatório">*</span>
+                            </label>
+                            <input id="dataFim" type="date" th:field="*{dataFim}">
+                            <span class="error" th:errors="*{dataFim}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                            Salvar reserva
+                        </button>
+                        <a class="btn btn-secondary" th:href="@{/}">
+                            Limpar / cancelar edição
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- CARD 3: Reservas Cadastradas -->
+        <section class="card" aria-labelledby="card-reservas-titulo">
+            <div class="card-header">
+                <div class="card-title-group">
+                    <div class="card-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 id="card-reservas-titulo" class="card-title">Reservas Cadastradas</h3>
+                        <p class="card-subtitle">Listagem completa dos agendamentos no sistema</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div th:if="${reservas.isEmpty()}" class="empty-state">
+                    <div class="empty-state-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <p>Nenhuma reserva cadastrada até o momento.</p>
+                </div>
+
+                <div th:unless="${reservas.isEmpty()}" class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Veículo</th>
+                                <th>Pessoa</th>
+                                <th>Início</th>
+                                <th>Fim</th>
+                                <th style="text-align: right;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="r : ${reservas}">
+                                <td>
+                                    <span th:if="${veiculosPorId[r.veiculoId] != null}">
+                                        <span class="badge-plate" th:text="${veiculosPorId[r.veiculoId].placa}">Placa</span>
+                                        <span style="margin-left: 6px;" th:text="${veiculosPorId[r.veiculoId].modelo}">Modelo</span>
+                                    </span>
+                                    <span th:unless="${veiculosPorId[r.veiculoId] != null}" class="badge badge-muted">Veículo excluído</span>
+                                </td>
+                                <td>
+                                    <strong th:if="${pessoasPorId[r.pessoaId] != null}" th:text="${pessoasPorId[r.pessoaId].nome}">Pessoa</strong>
+                                    <span th:unless="${pessoasPorId[r.pessoaId] != null}" class="badge badge-muted">Pessoa excluída</span>
+                                </td>
+                                <td>
+                                    <span th:text="${#temporals.format(r.dataInicio, 'dd/MM/yyyy')}">01/01/2026</span>
+                                </td>
+                                <td>
+                                    <span th:text="${#temporals.format(r.dataFim, 'dd/MM/yyyy')}">05/01/2026</span>
+                                </td>
+                                <td>
+                                    <div class="actions" style="justify-content: flex-end;">
+                                        <a class="btn btn-secondary btn-sm"
+                                           th:href="@{/reservas/{id}/editar(id=${r.id})}">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                            </svg>
+                                            Editar
+                                        </a>
+                                        <form method="post"
+                                              th:action="@{/reservas/{id}/excluir(id=${r.id})}"
+                                              onsubmit="return confirm('Cancelar esta reserva?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                                Cancelar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container footer-inner">
+            <div>
+                <strong>Garagem de Veículos</strong> • Sistema Acadêmico de Arquitetura de Software
+            </div>
+            <div>
+                UniRV • ESW430
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
