@@ -1,84 +1,80 @@
-# Garagem de Veículos
+# Vehicle Garage
 
-Sistema da disciplina **Arquitetura de Software — ESW430 — UniRV**.
+**Authors:** João Henrique, Gustavo Lopes, João Victor
 
-## Integrantes
+System built for the **Software Architecture — ESW430 — UniRV** course.
 
-- João Henrique
-- Gustavo Lopes
-- João Victor
+## Tech stack and how to run
 
-## Tecnologias e execução
-
-Java 17+, Maven 3.8+, Spring Boot 3.3.4, Thymeleaf e Jackson.
-Na pasta que contém `pom.xml`:
+Java 17+, Maven 3.8+, Spring Boot 3.3.4, Thymeleaf and Jackson.
+In the folder that contains `pom.xml`:
 
 ```sh
 mvn test
 mvn spring-boot:run
 ```
 
-Abra http://localhost:8080. A página inicial é **Reservas**.
-Pare com Ctrl+C e execute novamente para verificar a persistência.
-Os arquivos ficam em `data/`, relativos à pasta de execução. Execute sempre na raiz do projeto.
+Open http://localhost:8080. The home page is **Reservas** (Bookings).
+Stop it with Ctrl+C and run it again to check persistence.
+Data files are stored in `data/`, relative to the folder the app runs from. Always run it from the project root.
 
-## Entregas
+## Deliverables
 
-- Pessoas: listar, cadastrar, editar e excluir; CPF único.
-- Veículos: CRUD com placa única, marca, modelo, ano e cor opcional.
-- Reservas: criar escolhendo pessoa e veículo, editar o período e cancelar.
-- Disponibilidade de cada veículo calculada na data de hoje.
-- Início e fim são inclusivos. Uma reserva de 10/10 a 15/10 bloqueia outra começando em 15/10.
-- Datas invertidas, referências inexistentes e conflitos retornam erros no formulário.
-- JSON de exemplo com duas pessoas, dois veículos e uma reserva.
+- People: list, create, edit and delete; unique CPF (Brazilian ID number).
+- Vehicles: CRUD with unique license plate, make, model, year and optional color.
+- Bookings: create by choosing a person and a vehicle, edit the period and cancel.
+- Each vehicle's availability is calculated for today's date.
+- Start and end dates are inclusive. A booking from 10/10 to 15/10 blocks another one starting on 15/10.
+- Reversed dates, missing references and conflicts return errors on the form.
+- Sample JSON with two people, two vehicles and one booking.
 
-## Arquitetura e SOLID
+## Architecture and SOLID
 
-View → Controller → interface do repositório → repositório JSON.
-Em Reservas, o Controller também usa ReservaService para validar o período e os vínculos.
+View → Controller → repository interface → JSON repository.
+For Bookings, the Controller also uses ReservaService to validate the period and the links.
 
-| Princípio | Aplicação |
+| Principle | How it is applied |
 | --- | --- |
-| S | Models contêm dados e validações; repositórios persistem; serviço valida reservas; controllers coordenam telas. |
-| O | Uma implementação de banco pode substituir o repositório JSON sem alterar controllers e views. |
-| L | Controllers usam os contratos; os testes substituem repositórios por mocks. |
-| I | Cada entidade possui sua própria interface de repositório. |
-| D | Interfaces e serviço são recebidos por construtor; Spring entrega as dependências. |
+| S | Models hold data and validations; repositories persist; the service validates bookings; controllers coordinate the pages. |
+| O | A database implementation can replace the JSON repository without changing controllers and views. |
+| L | Controllers depend on the contracts; tests replace repositories with mocks. |
+| I | Each entity has its own repository interface. |
+| D | Interfaces and the service are received through the constructor; Spring provides the dependencies. |
 
-Cada entidade possui Model, Interface, Repository, Controller e Views.
-Reserva usa o formulário na própria página `reserva/index.html`.
-A sobreposição é verificada por `IReservaRepository.existeConflito`, ignorando o Id da reserva em edição.
-ReservaService valida, chama a verificação e grava apenas quando não há erros.
-O ObjectMapper injetado pelo Spring suporta LocalDate; datas ficam como `yyyy-MM-dd` no JSON.
+Each entity has a Model, Interface, Repository, Controller and Views.
+Booking uses the form on its own page, `reserva/index.html`.
+Overlap is checked by `IReservaRepository.existeConflito`, ignoring the Id of the booking being edited.
+ReservaService validates, runs the check and saves only when there are no errors.
+The ObjectMapper injected by Spring supports LocalDate; dates are stored as `yyyy-MM-dd` in the JSON.
 
-## Testes e evidências
+## Tests and evidence
 
-Execute `mvn test` para testar os limites de conflito, edição, referências inexistentes,
-CRUD e persistência por nova instância do repositório, validações e renderização das páginas.
+Run `mvn test` to test conflict boundaries, editing, missing references,
+CRUD and persistence through a new repository instance, validations and page rendering.
 
-**Estado de validação desta atualização:** 
-A aplicação foi executada localmente com Java 17 e Maven.
-A primeira execução dos testes apresentou 11 testes aprovados,
-sem falhas, erros ou testes ignorados.
-A interface foi atualizada com auxílio do Antigravity.
+**Validation status of this update:** 
+The application was run locally with Java 17 and Maven.
+The first test run had 11 passing tests,
+with no failures, errors or skipped tests.
+The interface was updated with the help of Antigravity.
 
-Consulte [docs/VALIDACAO.md](docs/VALIDACAO.md) para o roteiro manual e prints exigidos.
-Os prints estão disponíveis na seção Evidências da Entrega 2.
+See [docs/VALIDACAO.md](docs/VALIDACAO.md) (in Portuguese) for the manual test script and the required screenshots.
+The screenshots are in the Delivery 2 Evidence section.
 
-## Ferramentas de IA utilizadas
+## AI tools used
 
-- Claude (Anthropic): geração e revisão da primeira entrega.
-- ChatGPT / Codex (OpenAI): implementação e revisão de Veículos e Reservas e preparação de testes.
-- Antigravity: melhoria visual das páginas Thymeleaf e do CSS.
+- Claude (Anthropic): generation and review of the first delivery.
+- ChatGPT / Codex (OpenAI): implementation and review of Vehicles and Bookings, and test preparation.
+- Antigravity: visual improvements to the Thymeleaf pages and the CSS.
 
-## Limitações
+## Limitations
 
-A exclusão de pessoa ou veículo com reservas não é bloqueada (desafio opcional).
-Reservas antigas continuam listadas com indicação de cadastro excluído.
-A aplicação utiliza arquivos locais e é destinada ao uso acadêmico em uma única instância.
+Deleting a person or vehicle that has bookings is not blocked (optional challenge).
+Old bookings remain listed with a note that the record was deleted.
+The application uses local files and is meant for academic use on a single instance.
 
-## Evidências da Entrega 2
+## Delivery 2 Evidence
 
-![Página de Reservas](docs/reservas.png)
+![Bookings page](docs/reservas.png)
 
-![Reserva em conflito bloqueada](docs/conflito.png)
+![Conflicting booking blocked](docs/conflito.png)
